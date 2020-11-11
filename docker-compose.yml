@@ -1,0 +1,40 @@
+version: '3'
+
+services:
+  api:
+    container_name: "api"
+    build: "./"
+    ports:
+      - "3333:3333"
+    volumes:
+      - ./:/app
+    command: npm start
+
+  mysql:
+    image: mysql
+    environment:
+    - MYSQL_ROOT_PASSWORD=admin
+    - MYSQL_DATABASE=admin
+    - MYSQL_USER=admin
+    - MYSQL_PASSWORD=admin
+    - MYSQL_ROOT_HOST=%
+    ports:
+      - "3306:3306"
+    command: --default-authentication-plugin=mysql_native_password
+
+  postgresql:
+    image: postgres
+    ports:
+      - "5432:5432"  
+    environment:
+      POSTGRES_PASSWORD: "admin"
+      POSTGRES_USER: "admin"
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin
+    ports:
+      - "15433:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "admin@email.com"
+      PGADMIN_DEFAULT_PASSWORD: "Pgadmin123"
