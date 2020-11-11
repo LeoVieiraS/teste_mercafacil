@@ -1,16 +1,8 @@
 version: '3'
 
 services:
-  api:
-    container_name: "api"
-    build: "./"
-    ports:
-      - "3333:3333"
-    volumes:
-      - ./:/app
-    command: npm start
-
   mysql:
+    container_name: dbmacapa
     image: mysql
     environment:
     - MYSQL_ROOT_PASSWORD=admin
@@ -23,6 +15,7 @@ services:
     command: --default-authentication-plugin=mysql_native_password
 
   postgresql:
+    container_name: dbvarejao
     image: postgres
     ports:
       - "5432:5432"  
@@ -38,3 +31,15 @@ services:
     environment:
       PGADMIN_DEFAULT_EMAIL: "admin@email.com"
       PGADMIN_DEFAULT_PASSWORD: "Pgadmin123"
+
+  api:
+    container_name: "api"
+    build: "./"
+    ports:
+      - "3333:3333"
+    volumes:
+      - ./:/app
+    command: npm start
+    depends_on:
+      - mysql
+      - postgresql

@@ -5,7 +5,7 @@ module.exports = {
   varejao: {
     client: 'pg',
     connection: {
-      host:"mercafacil_postgresql_1",
+      host:"dbvarejao",
       database: "admin",
       user:"admin",
       password:"admin"
@@ -14,13 +14,11 @@ module.exports = {
   macapa: {
     client: 'mysql',
     connection: {
-      host:"mercafacil_mysql_1",
+      host:"dbmacapa",
       database: "admin",
       user:"admin",
       password:"admin"
     }
-  },
-    migrations: {
-      tableName: 'knex_migrations'
-    }
+  }
+  
 };

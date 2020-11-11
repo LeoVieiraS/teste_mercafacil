@@ -4,39 +4,54 @@ module.exports = {
   async insertVarejao(req, res){
     const {contacts} = req.body;
     var invalid_contacts = [];
+    var valid_contacts = []
 
     const total_contacts = contacts.length;
 
-    await contacts.forEach(async(contact) => {
-      //console.log(contact);
+     contacts.forEach(contact => {
+      //Valida se parametros foram informados
+      if(!contact.name || !contact.cellphone){
+        invalid_contacts.push(contact)
+        return
+      }
+      // valida a quantidade de carateres
+      if(contact.cellphone.length != 13){
+        invalid_contacts.push(contact)
+        return
+      }
 
-      const insert = await knex.knexVarejao('contacts')
-        .insert(
-          {
-            nome:contact.name,
-            celular:contact.cellphone
-          }
-        )
-        .then((data) => {
-          return data;
-          //console.log(`nome:${contact.nome} celular: ${contact.celular} inserido com sucesso`);
-        })
-        .catch((error)=>{
-          return false;
-        })
+      // verificando se registro ja existe na base
 
-        console.log(`Resultado insert ${insert}`);
+      /*
+      TODO: VERIFICAR REGISTROS REPETIDOS
+      const id = knex.knexVarejao('contacts')
+      .where('nome','=',contact.name)
+      .where('telefone', '=', contact.cellphone )
+      .select('id')
 
-        !insert ? invalid_contacts.push(contact) : '';
+      if(id){
+        console.log(id);
+        invalid_contacts.push(contact)
+        return
+      }
+      */
 
-        console.log(` invalidos dentro do foreach ${invalid_contacts}`);
-      
+      //insere numa lista de contatos validos ja utilizando o mesmo nome da coluna na tabela para poder passar diretamente a lista ao knex
+      valid_contacts.push({nome:contact.name,celular:contact.cellphone})
+
     }); 
-        
-    console.log(` invalidos FORA do foreach ${invalid_contacts}`);
-    const total_invalid = invalid_contacts.length;
 
-    return res.status(200).json({total_contacts,total_invalid});
+    knex.knexVarejao('contacts')
+        .insert(valid_contacts)
+        .then(data => {})
+        .catch(error => {
+          res.send(500).json({error:"Error at insert data"})
+        });
+
+    return res.status(200).json({
+                                  success:valid_contacts.length,
+                                  errors:invalid_contacts.length,
+                                  invalid_or_repeated_contacts:invalid_contacts});
   },
 
   async indexVarejao(req, res){
@@ -44,40 +59,42 @@ module.exports = {
     return res.json(contacts);
 
   },
+  
   async indexMacapa(req,res){
     return knex.knexMacapa('contacts').then((results) => res.json(results));
   },
   async insertMacapa(req,res){
+    invalid_contacts = [];
+    valid_contacts = [];
 
     const {contacts} = req.body;
 
-    contacts.forEach(async(contact) => {
+    contacts.forEach(contact =>{
+
+      if(!contact.name || !contact.cellphone){
+        invalid_contacts.push(contact);
+        return
+      }
+      // valida a quantidade de carateres
+      if(contact.cellphone.length != 13){
+        invalid_contacts.push(contact);
+        return
+      }
       const name = contact.name.toUpperCase();
-      var cellphone = contact.cellphone;
-      cellphone = cellphone.replace(/(\d{2})?(\d{2})?(\d{5})?(\d{4})/, "+$1 ($2) $3-$4");
+      cellphone = contact.cellphone.replace(/(\d{2})?(\d{2})?(\d{5})?(\d{4})/, "+$1 ($2) $3-$4");
 
-      await knex.knexMacapa('contacts')
-        .insert({
-            nome:name,
-            celular:cellphone}
-        )
-        .then((data) => {
+      valid_contacts.push({nome:name,celular:cellphone});
 
-        })
-        .catch((error)=>{
-          console.log(error)
-
-        });
-        ;
-
-      //isValid = cellphone.length != 19 ? false: true
-      //console.log(isValid);
-
-      //console.log(name);
     });
 
-    return res.status(200).json({status:"sufffccess"});
+    knex.knexMacapa('contacts')
+    .insert(valid_contacts)
+    .then((data) => {})
+    .catch((error)=>{
+      res.send(500).json({error:"Error at insert data"})
+    });
 
+    return res.status(200).json({status:"success"});
   }
 
 }

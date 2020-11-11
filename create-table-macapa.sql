@@ -1,3 +1,4 @@
+use admin;
 CREATE table contacts (
 	id serial PRIMARY KEY,
 	nome VARCHAR ( 200 ) NOT NULL,
