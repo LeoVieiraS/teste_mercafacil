@@ -22,7 +22,7 @@ module.exports = {
 
     // cria o JWT
     const token = jwt.sign({ user_id }, process.env.SECRET, {
-      expiresIn: 300 // expira em 5 minutos
+      expiresIn: 3600 // expira em 1 hora
     });
 
     await knex.knexAuth('users').where('id', '=',user_id).update({token});
