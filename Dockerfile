@@ -3,3 +3,4 @@ WORKDIR /app
 COPY . .
 RUN apt update -y
 RUN apt upgrade -y
+RUN npm install
