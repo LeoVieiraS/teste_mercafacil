@@ -2,7 +2,7 @@ version: '3'
 
 services:
   mysql:
-    container_name: dbmacapa
+    container_name: dbmysql
     image: mysql
     environment:
     - MYSQL_ROOT_PASSWORD=admin
@@ -15,7 +15,7 @@ services:
     command: --default-authentication-plugin=mysql_native_password
 
   postgresql:
-    container_name: dbvarejao
+    container_name: dbpostgres
     image: postgres
     ports:
       - "5432:5432"  

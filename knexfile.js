@@ -5,7 +5,7 @@ module.exports = {
   varejao: {
     client: 'pg',
     connection: {
-      host:"dbvarejao",
+      host:"dbpostgres",
       database: "admin",
       user:"admin",
       password:"admin"
@@ -14,11 +14,21 @@ module.exports = {
   macapa: {
     client: 'mysql',
     connection: {
-      host:"dbmacapa",
+      host:"dbmysql",
       database: "admin",
       user:"admin",
       password:"admin"
     }
+  },
+  auth: {
+    client: 'pg',
+    connection: {
+      host:"dbpostgres",
+      database: "auth",
+      user:"admin",
+      password:"admin"
+    }
+
   }
   
 };

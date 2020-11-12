@@ -10,12 +10,7 @@ module.exports = {
 
      contacts.forEach(contact => {
       //Valida se parametros foram informados
-      if(!contact.name || !contact.cellphone){
-        invalid_contacts.push(contact)
-        return
-      }
-      // valida a quantidade de carateres
-      if(contact.cellphone.length != 13){
+      if(!contact.name || !contact.cellphone || contact.cellphone.length != 13){
         invalid_contacts.push(contact)
         return
       }
@@ -71,15 +66,12 @@ module.exports = {
 
     contacts.forEach(contact =>{
 
-      if(!contact.name || !contact.cellphone){
+      if(!contact.name || !contact.cellphone || contact.cellphone.length != 13){
         invalid_contacts.push(contact);
         return
       }
       // valida a quantidade de carateres
-      if(contact.cellphone.length != 13){
-        invalid_contacts.push(contact);
-        return
-      }
+  
       const name = contact.name.toUpperCase();
       cellphone = contact.cellphone.replace(/(\d{2})?(\d{2})?(\d{5})?(\d{4})/, "+$1 ($2) $3-$4");
 
