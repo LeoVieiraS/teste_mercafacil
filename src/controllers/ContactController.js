@@ -21,11 +21,11 @@ module.exports = {
 
     }); 
     // insere a lista valida no banco
-    knex.knexVarejao('contacts')
+    await knex.knexVarejao('contacts')
         .insert(valid_contacts)
         .then(data => {})
         .catch(error => {
-          res.send(500).json({error:"Error at insert data"})
+          return res.send(500).json({error:"Error at insert data"})
         });
 
     return res.status(200).json({
@@ -41,7 +41,7 @@ module.exports = {
   },
   
   async indexMacapa(req,res){
-    const contacts = await knex.knexVarejao('contacts')
+    const contacts = await knex.knexMacapa('contacts')
     return res.json(contacts);
   },
   async insertMacapa(req,res){
@@ -65,11 +65,11 @@ module.exports = {
 
     });
     //insere a lista valida no banco
-    knex.knexMacapa('contacts')
+    await knex.knexMacapa('contacts')
     .insert(valid_contacts)
     .then((data) => {})
     .catch((error)=>{
-      res.send(500).json({error:"Error at insert data"})
+      return res.send(500).json({error:"Error at insert data"})
     });
 
     return res.status(200).json({
